@@ -42,8 +42,10 @@ class Category(models.Model):
 class Product(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField(default="No description available")
+    sku = models.CharField(max_length=100, unique=True, null=True)  # Stock Keeping Unit
+    ean = models.CharField(max_length=20, unique=True, null=True)  # European Article Number
+    url = models.URLField(max_length=200, null=True)  # Link to the product page
     categories = models.ManyToManyField(Category, related_name='products')
-    organization = models.ForeignKey(Organization, on_delete=models.CASCADE, null=True)
 
     class Meta:
         db_table = 'product' 
