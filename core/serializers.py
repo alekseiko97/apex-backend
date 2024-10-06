@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Organization, Product, UserProfile, Category, User
+from .models import Organization, Product, Category, User
 
 class OrganizationSerializer(serializers.ModelSerializer):
     class Meta:
@@ -23,10 +23,9 @@ class CategorySerializer(serializers.ModelSerializer):
         subcategories = obj.subcategories.all()
         return CategorySerializer(subcategories, many=True).data
     
-class UserProfileSerializer(serializers.ModelSerializer):
-    user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
-    organization = serializers.PrimaryKeyRelatedField(read_only=True)
+class UserSerializer(serializers.ModelSerializer):
+    organization = serializers.PrimaryKeyRelatedField(queryset=Organization.objects.all())
 
     class Meta:
-        model = UserProfile
-        fields = ['id', 'user', 'organization']
+        model = User
+        fields = ['id', 'organization']

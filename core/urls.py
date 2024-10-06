@@ -6,8 +6,8 @@ from .views import (
     CategoryDetailView,
     ProductListCreateView,
     ProductDetailView,
-    UserProfileListCreateView,
-    UserProfileDetailView
+    UserListCreateView,
+    UserDetailView
 )
 
 urlpatterns = [
@@ -23,7 +23,7 @@ urlpatterns = [
     path('products/', ProductListCreateView.as_view(), name='product_list_create'),
     path('products/<int:pk>/', ProductDetailView.as_view(), name='product_detail'),
 
-    # UserProfile URLs
-    path('userprofiles/', UserProfileListCreateView.as_view(), name='userprofile_list_create'),
-    path('userprofiles/<int:pk>/', UserProfileDetailView.as_view(), name='userprofile_detail'),
+    # User URLs
+    path('users/', UserListCreateView.as_view(), name='user_list_create'),
+    path('users/<int:pk>/', UserDetailView.as_view(), name='user_detail'),
 ]

@@ -1,11 +1,11 @@
 from django.shortcuts import render, get_object_or_404
 from rest_framework import generics
-from .models import Organization, Category, Product, UserProfile
+from .models import Organization, Category, Product, User
 from .serializers import (
     OrganizationSerializer,
     CategorySerializer,
     ProductSerializer,
-    UserProfileSerializer
+    UserSerializer
 )
 
 # organization
@@ -35,12 +35,11 @@ class ProductDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
 
-# user profile
-class UserProfileListCreateView(generics.ListCreateAPIView):
-    queryset = UserProfile.objects.all()
-    serializer_class = UserProfileSerializer
+# user 
+class UserListCreateView(generics.ListCreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
 
-class UserProfileDetailView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = UserProfile.objects.all()
-    serializer_class = UserProfileSerializer
-
+class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
