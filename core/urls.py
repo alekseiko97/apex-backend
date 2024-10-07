@@ -7,7 +7,8 @@ from .views import (
     ProductListCreateView,
     ProductDetailView,
     UserListCreateView,
-    UserDetailView
+    UserDetailView,
+    SessionView
 )
 
 urlpatterns = [
@@ -26,4 +27,7 @@ urlpatterns = [
     # User URLs
     path('users/', UserListCreateView.as_view(), name='user_list_create'),
     path('users/<int:pk>/', UserDetailView.as_view(), name='user_detail'),
+
+    # Session management (login and logout)
+    path('session/', SessionView.as_view(), name='session-management'),  # Add the session endpoint here
 ]

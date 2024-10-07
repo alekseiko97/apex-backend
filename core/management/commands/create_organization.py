@@ -1,4 +1,3 @@
-import argparse
 from django.core.management.base import BaseCommand
 from core.models import Organization
 

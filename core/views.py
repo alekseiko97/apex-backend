@@ -1,5 +1,9 @@
 from django.shortcuts import render, get_object_or_404
 from rest_framework import generics
+from django.contrib.auth import authenticate, login, logout
+from django.http import JsonResponse
+from rest_framework.views import APIView
+from rest_framework import status
 from .models import Organization, Category, Product, User
 from .serializers import (
     OrganizationSerializer,
@@ -43,3 +47,37 @@ class UserListCreateView(generics.ListCreateAPIView):
 class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+# session management
+class SessionView(APIView):
+    """
+    View to create and delete user session.
+    """
+
+    def post(self, request):
+        """
+        Create a session (login).
+        """
+        username = request.data.get('username')
+        password = request.data.get('password')
+
+        if not username or not password:
+            return JsonResponse({'error': 'Please provide both username and password.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        user = authenticate(username=username, password=password)
+
+        if user is not None:
+            login(request, user)  # This sets the session for the user
+            return JsonResponse({'message': 'Login successful'}, status=status.HTTP_200_OK)
+        else:
+            return JsonResponse({'error': 'Invalid credentials.'}, status=status.HTTP_401_UNAUTHORIZED)
+
+    def delete(self, request):
+        """
+        Delete a session (logout).
+        """
+        if request.user.is_authenticated:
+            logout(request)
+            return JsonResponse({'message': 'Logout successful'}, status=status.HTTP_200_OK)
+        else:
+            return JsonResponse({'error': 'No active session found.'}, status=status.HTTP_400_BAD_REQUEST)
