@@ -4,10 +4,12 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import JsonResponse
 from rest_framework.views import APIView
 from rest_framework import status
+from django.db.models import Count
 from .models import Organization, Category, Product, User
 from .serializers import (
     OrganizationSerializer,
-    CategorySerializer,
+    CategoryOverviewSerializer,
+    CategoryDetailSerializer,
     ProductSerializer,
     UserSerializer
 )
@@ -23,12 +25,12 @@ class OrganizationDetailView(generics.RetrieveUpdateDestroyAPIView):
 
 # category
 class CategoryListCreateView(generics.ListCreateAPIView):
-    queryset = Category.objects.all()
-    serializer_class = CategorySerializer
+    queryset = Category.objects.annotate(products_count=Count('products')).prefetch_related('subcategories')  # Add product count
+    serializer_class = CategoryOverviewSerializer
 
-class CategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Category.objects.all()
-    serializer_class = CategorySerializer
+class CategoryDetailView(generics.RetrieveAPIView):
+    queryset = Category.objects.prefetch_related('products')  # Prefetch related products
+    serializer_class = CategoryDetailSerializer
 
 # product 
 class ProductListCreateView(generics.ListCreateAPIView):
@@ -68,7 +70,11 @@ class SessionView(APIView):
 
         if user is not None:
             login(request, user)  # This sets the session for the user
-            return JsonResponse({'message': 'Login successful'}, status=status.HTTP_200_OK)
+
+            session_token = request.session.session_key
+            
+            return JsonResponse({'sessionToken': session_token})
+            #return JsonResponse({'message': 'Login successful'}, status=status.HTTP_200_OK)
         else:
             return JsonResponse({'error': 'Invalid credentials.'}, status=status.HTTP_401_UNAUTHORIZED)
 

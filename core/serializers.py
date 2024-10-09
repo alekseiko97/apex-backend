@@ -10,18 +10,26 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = ['id', 'name']
-
-class CategorySerializer(serializers.ModelSerializer):
-    products = ProductSerializer(many=True, read_only=True)
+    
+# categories    
+class CategoryOverviewSerializer(serializers.ModelSerializer):
+    products_count = serializers.IntegerField(read_only=True)  # Add products count
     subcategories = serializers.SerializerMethodField()
 
     class Meta:
         model = Category
-        fields = ['id', 'name', 'description', 'is_active', 'created_at', 'products', 'subcategories']
+        fields = ['id', 'name', 'is_active', 'created_at', 'subcategories', 'products_count']  # Only products_count here
 
     def get_subcategories(self, obj):
         subcategories = obj.subcategories.all()
-        return CategorySerializer(subcategories, many=True).data
+        return CategoryOverviewSerializer(subcategories, many=True).data
+
+class CategoryDetailSerializer(serializers.ModelSerializer):
+    products = ProductSerializer(many=True, read_only=True)  # Include full product details
+
+    class Meta:
+        model = Category
+        fields = ['id', 'name', 'is_active', 'created_at', 'products']  # Include the full product set
     
 class UserSerializer(serializers.ModelSerializer):
     organization = serializers.PrimaryKeyRelatedField(queryset=Organization.objects.all())
