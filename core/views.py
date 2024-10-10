@@ -28,7 +28,7 @@ class CategoryListCreateView(generics.ListCreateAPIView):
     queryset = Category.objects.annotate(products_count=Count('products')).prefetch_related('subcategories')  # Add product count
     serializer_class = CategoryOverviewSerializer
 
-class CategoryDetailView(generics.RetrieveAPIView):
+class CategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Category.objects.prefetch_related('products')  # Prefetch related products
     serializer_class = CategoryDetailSerializer
 

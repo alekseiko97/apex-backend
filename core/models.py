@@ -16,16 +16,6 @@ class User(AbstractUser):
     class Meta:
         db_table = 'user'
 
-# Signal to create a UserProfile when a User is created
-# @receiver(post_save, sender=User)
-# def create_user_profile(sender, instance, created, **kwargs):
-#     if created:
-#         UserProfile.objects.create(user=instance)
-
-# @receiver(post_save, sender=User)
-# def save_user_profile(sender, instance, **kwargs):
-#     instance.userprofile.save()
-
 class Category(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField()

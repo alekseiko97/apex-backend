@@ -28,7 +28,7 @@ class Command(BaseCommand):
 
                 # Create or get the category
                 category, _ = Category.objects.get_or_create(
-                    id = id,
+                    #id = id,
                     defaults={
                         'name': name,
                     }
