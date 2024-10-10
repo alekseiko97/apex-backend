@@ -18,7 +18,7 @@ class CategoryOverviewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Category
-        fields = ['id', 'name', 'is_active', 'created_at', 'subcategories', 'products_count']  # Only products_count here
+        fields = ['id', 'name', 'description', 'is_active', 'created_at', 'subcategories', 'products_count']  # Only products_count here
 
     def get_subcategories(self, obj):
         subcategories = obj.subcategories.all()
@@ -29,7 +29,7 @@ class CategoryDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Category
-        fields = ['id', 'name', 'is_active', 'created_at', 'products']  # Include the full product set
+        fields = ['id', 'name', 'description', 'is_active', 'created_at', 'products']  # Include the full product set
     
 class UserSerializer(serializers.ModelSerializer):
     organization = serializers.PrimaryKeyRelatedField(queryset=Organization.objects.all())
